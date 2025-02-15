@@ -19,7 +19,7 @@
         h1 {
             font-size: 3em;
             color: #34e7e2;
-            text-shadow: none; 
+            text-shadow: none;
         }
 
         #game-container {
@@ -31,6 +31,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
             backdrop-filter: blur(10px);
         }
+
         button {
             margin: 10px;
             padding: 10px 20px;
@@ -47,10 +48,11 @@
                 background: #34e7e2;
                 color: #0d1b2a;
             }
+
         #story {
             font-size: 1.5em;
             line-height: 1.6;
-            text-shadow: none; 
+            text-shadow: none;
         }
 
         #choices {
@@ -91,8 +93,7 @@
     </style>
 </head>
 <body>
-    <div class="stars">
-    </div>
+    <div class="stars"></div>
     <div id="game-container">
         <h1>Űrnyomozós Kalandjáték</h1>
         <p id="story"></p>
@@ -106,7 +107,7 @@
         for (let i = 0; i < numStars; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
-            const size = Math.random() * 3 + 1;  
+            const size = Math.random() * 3 + 1;
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
             star.style.top = `${Math.random() * 100}%`;
@@ -159,11 +160,60 @@
                     { text: "Visszatérsz az állomásra", next: "secret_room" }
                 ]
             },
+            alien_world: {
+                text: "Belépsz a teleportkapuba és egy idegen világban találod magad. Az idegen környezet lenyűgöző, de veszélyesnek tűnik. Mit teszel?",
+                choices: [
+                    { text: "Felfedezel", next: "alien_exploration" },
+                    { text: "Visszatérsz a teleportkapuhoz", next: "analyze_device" }
+                ]
+            },
+            alien_exploration: {
+                text: "Ahogy felfedezed az idegen világot, egy rejtett bázist találsz. Egyedül mersz bemenni?",
+                choices: [
+                    { text: "Bemenek", next: "alien_base" },
+                    { text: "Visszatérsz", next: "alien_world" }
+                ]
+            },
+            alien_base: {
+                text: "A bázison egy idegen technológiát találsz, ami a gyilkoshoz vezethet. Mit teszel?",
+                choices: [
+                    { text: "Információt keresel", next: "alien_transmission" },
+                    { text: "Visszatérsz a hajóra", next: "hangar" }
+                ]
+            },
+            alien_transmission: {
+                text: "A bázison talált eszköz egy idegen kommunikációs jelet ad le. A gyilkos kapcsolatban állhat más fajokkal. Mit teszel?",
+                choices: [
+                    { text: "Eszköz használata", next: "final_confrontation" },
+                    { text: "Nyomokat keresel", next: "secret_room" }
+                ]
+            },
             crew_interview: {
                 text: "A legénység egyik tagja idegesen viselkedik. Vajon tud valamit?",
                 choices: [
                     { text: "Kihallgatod", next: "suspect_interrogation" },
                     { text: "Más nyomot keresel", next: "lab" }
+                ]
+            },
+            suspect_interrogation: {
+                text: "A gyanúsított idegesen reagál a kérdésekre. Kétségbeesetten próbálja védeni magát. Mihez kezdesz?",
+                choices: [
+                    { text: "Keményebben faggatod", next: "interrogation_pressure" },
+                    { text: "Békésen próbálkozol", next: "interrogation_tactics" }
+                ]
+            },
+            interrogation_pressure: {
+                text: "A gyanúsított végül megadja magát, és elmondja, hogy kapcsolatban állt az idegenekkel. Mi a következő lépésed?",
+                choices: [
+                    { text: "Visszatérsz a bázisra", next: "alien_transmission" },
+                    { text: "További nyomokat keresel", next: "final_confrontation" }
+                ]
+            },
+            interrogation_tactics: {
+                text: "A gyanúsított kezd megnyugodni, és több részletet árul el. Az ügy egy új fordulatot vesz. Mit teszel?",
+                choices: [
+                    { text: "További kérdéseket teszel fel", next: "alien_transmission" },
+                    { text: "Követed a nyomokat a laborban", next: "lab" }
                 ]
             },
             secret_room: {
