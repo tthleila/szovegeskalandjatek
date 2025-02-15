@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Űrnyomozó Kalandjáték</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0d1b2a, #212f3c);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            background-size: cover;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #34e7e2;
+            text-shadow: none; 
+        }
+
+        #game-container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #34e7e2;
+            border-radius: 5px;
+            background: transparent;
+            color: #34e7e2;
+            transition: background 0.3s, color 0.3s;
+        }
+
+            button:hover {
+                background: #34e7e2;
+                color: #0d1b2a;
+            }
+        #story {
+            font-size: 1.5em;
+            line-height: 1.6;
+            text-shadow: none; 
+        }
+
+        #choices {
+            margin-top: 20px;
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkling 1.5s infinite ease-in-out;
+        }
+
+        @keyframes twinkling {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars">
+    </div>
+    <div id="game-container">
+        <h1>Űrnyomozós Kalandjáték</h1>
+        <p id="story"></p>
+        <div id="choices"></div>
+    </div>
+
+    <script>
+        const numStars = 100;
+        const starsContainer = document.querySelector('.stars');
+
+        for (let i = 0; i < numStars; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 3 + 1;  
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            starsContainer.appendChild(star);
+        }
+
+        const story = {
+            start: {
+                text: "Egy titokzatos gyilkosság történt a Galaxis 7 űrállomáson. Te, mint az Intergalaktikus Nyomozók egyik legjobbja, meg kell találd az elkövetőt. Hol kezdesz nyomozni?",
+                choices: [
+                    { text: "Biztonsági felvételek elemzése", next: "security_footage" },
+                    { text: "Hajóhangár átkutatása", next: "hangar" }
+                ]
+            },
+            security_footage: {
+                text: "A biztonsági kamerák egy gyanús személyt rögzítettek egy rejtett kóddal. Mit teszel?",
+                choices: [
+                    { text: "Kód megfejtése", next: "decode_code" },
+                    { text: "Nyomozás tovább a laborban", next: "lab" }
+                ]
+            },
+            hangar: {
+                text: "A hajóhangárban egy idegen technológiájú eszközt találsz. Mit vizsgálsz meg?",
+                choices: [
+                    { text: "Eszköz elemzése", next: "analyze_device" },
+                    { text: "Tovább kutatsz", next: "crew_interview" }
+                ]
+            },
+            decode_code: {
+                text: "A kód egy rejtett szobához vezet az állomás mélyén. Mit teszel?",
+                choices: [
+                    { text: "Belépsz a szobába", next: "secret_room" },
+                    { text: "További információt keresel", next: "crew_interview" }
+                ]
+            },
+            lab: {
+                text: "A laborban egy furcsa biológiai anyagot vizsgálnak. Lehetséges, hogy egy idegen életforma áll a háttérben?",
+                choices: [
+                    { text: "Minta elemzése", next: "sample_analysis" },
+                    { text: "Nyomozás tovább", next: "secret_room" }
+                ]
+            },
+            analyze_device: {
+                text: "A vizsgálat szerint az eszköz egy teleportkapuhoz kapcsolódik. Vajon hová vezet?",
+                choices: [
+                    { text: "Belépsz", next: "alien_world" },
+                    { text: "Visszatérsz az állomásra", next: "secret_room" }
+                ]
+            },
+            crew_interview: {
+                text: "A legénység egyik tagja idegesen viselkedik. Vajon tud valamit?",
+                choices: [
+                    { text: "Kihallgatod", next: "suspect_interrogation" },
+                    { text: "Más nyomot keresel", next: "lab" }
+                ]
+            },
+            secret_room: {
+                text: "A rejtett szoba tele van titkos dokumentumokkal és egy idegen kommunikációs eszközzel. Vajon a gyilkos kapcsolatban állt egy másik fajjal?",
+                choices: [
+                    { text: "Eszköz aktiválása", next: "alien_transmission" },
+                    { text: "Nyomok további elemzése", next: "final_confrontation" }
+                ]
+            },
+            final_confrontation: {
+                text: "Összegyűjtötted a nyomokat és szembesíted a fő gyanúsítottat. Vajon elismeri a bűnösségét?",
+                choices: [
+                    { text: "Elkapod a gyilkost", next: "good_ending" },
+                    { text: "A nyomozás zsákutcába jut", next: "bad_ending" }
+                ]
+            },
+            good_ending: {
+                text: "Gratulálok! Sikeresen megoldottad az ügyet, és a gyilkos rács mögé került!",
+                choices: [
+                    { text: "Újra játszod?", next: "start" }
+                ]
+            },
+            bad_ending: {
+                text: "A gyilkos eltűnt, és az igazság sosem derült ki. Próbáld újra!",
+                choices: [
+                    { text: "Újra játszod?", next: "start" }
+                ]
+            }
+        };
+
+        function showStory(part) {
+            document.getElementById("story").textContent = story[part].text;
+            const choicesContainer = document.getElementById("choices");
+            choicesContainer.innerHTML = "";
+            story[part].choices.forEach(choice => {
+                const button = document.createElement("button");
+                button.textContent = choice.text;
+                button.onclick = () => showStory(choice.next);
+                choicesContainer.appendChild(button);
+            });
+        }
+
+        showStory("start");
+    </script>
+</body>
+</html>
